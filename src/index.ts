@@ -6,6 +6,7 @@ import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
 
 import { UserResolver } from "./modules";
+import { formatError } from "./utils";
 
 createConnection().then(async () => {
   const schema: GraphQLSchema = await buildSchema({
@@ -13,7 +14,8 @@ createConnection().then(async () => {
   });
   const app: express.Application = express();
   const server: ApolloServer = new ApolloServer({
-    schema
+    schema,
+    formatError
   });
   server.applyMiddleware({ app });
 

@@ -1,8 +1,11 @@
 import { Resolver, Arg, Query, Mutation } from "type-graphql";
 import * as bcrypt from "bcrypt";
+import * as fe from "easygraphql-format-error";
 
 import { User } from "./entity";
 import { UserRegistrationInput, UserLoginInput } from "./inputs";
+
+const FormatError: fe = new fe();
 
 @Resolver(User)
 export class UserResolver {
