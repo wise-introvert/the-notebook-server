@@ -7,12 +7,12 @@ import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
 import * as cookieParser from "cookie-parser";
 
-import { UserResolver } from "./modules";
+import { UserResolver, DepartmentResolver } from "./modules";
 import { formatError, GQLRuntimeContext } from "./utils";
 
 createConnection().then(async () => {
   const schema: GraphQLSchema = await buildSchema({
-    resolvers: [UserResolver]
+    resolvers: [UserResolver, DepartmentResolver]
   });
   const app: express.Application = express();
   app.use(cookieParser());
