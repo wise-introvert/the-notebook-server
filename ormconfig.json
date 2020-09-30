@@ -7,7 +7,7 @@
   "database": "thenotebookdev",
   "synchronize": true,
   "logging": false,
-  "entities": ["src/modules/**/entity.*"],
+  "entities": ["src/modules/**/*entity.*"],
   "migrations": ["src/migration/**/*.ts"],
   "subscribers": ["src/subscriber/**/*.ts"],
   "cli": {

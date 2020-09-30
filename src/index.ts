@@ -1,21 +1,28 @@
+import "dotenv/config";
 import "reflect-metadata";
 import * as express from "express";
 import { createConnection } from "typeorm";
 import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
+import * as cookieParser from "cookie-parser";
 
 import { UserResolver } from "./modules";
-import { formatError } from "./utils";
+import { formatError, GQLRuntimeContext } from "./utils";
 
 createConnection().then(async () => {
   const schema: GraphQLSchema = await buildSchema({
     resolvers: [UserResolver]
   });
   const app: express.Application = express();
+  app.use(cookieParser());
   const server: ApolloServer = new ApolloServer({
     schema,
-    formatError
+    formatError,
+    context: ({ req, res }: GQLRuntimeContext): GQLRuntimeContext => ({
+      req,
+      res
+    })
   });
   server.applyMiddleware({ app });
 
