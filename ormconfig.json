@@ -7,11 +7,11 @@
   "database": "thenotebookdev",
   "synchronize": true,
   "logging": false,
-  "entities": ["src/entity/**/*.ts"],
+  "entities": ["src/modules/**/entity.*"],
   "migrations": ["src/migration/**/*.ts"],
   "subscribers": ["src/subscriber/**/*.ts"],
   "cli": {
-    "entitiesDir": "src/entity",
+    "entitiesDir": "src/modules/**/entity.*",
     "migrationsDir": "src/migration",
     "subscribersDir": "src/subscriber"
   }
