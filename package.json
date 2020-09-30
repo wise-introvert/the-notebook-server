@@ -24,6 +24,7 @@
     "easygraphql-format-error": "^0.0.3",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
+    "i": "^0.3.6",
     "lodash": "^4.17.20",
     "pg": "^8.3.3",
     "reflect-metadata": "^0.1.13",

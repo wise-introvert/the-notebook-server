@@ -10,6 +10,9 @@ import {
 import { ObjectType, Field, ID } from "type-graphql";
 import { v4 as uuid } from "uuid";
 import * as bcrypt from "bcrypt";
+import * as i from "i";
+
+const inflect = i();
 
 @Entity("users")
 @ObjectType()
@@ -26,6 +29,10 @@ export class User extends BaseEntity {
   @Field()
   password: string;
 
+  @Column("varchar", { length: 255 })
+  @Field()
+  name: string;
+
   @Column("varchar", { length: 255, nullable: true })
   @Field()
   email?: string;
@@ -39,6 +46,7 @@ export class User extends BaseEntity {
   @BeforeInsert()
   async setup(): Promise<void> {
     this.id = uuid();
+    this.name = inflect.titleize(this.name).replace(/\//gi, ".");
     this.password = await bcrypt.hash(this.password, bcrypt.genSaltSync(12));
   }
 }
