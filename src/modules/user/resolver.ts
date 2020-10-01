@@ -39,11 +39,19 @@ export class UserResolver {
     return user;
   }
 
-  @Authorized(Roles.ADMIN)
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { res }: GQLRuntimeContext): Promise<boolean> {
+    try {
+      res.clearCookie(process.env.AT_COOKIE);
+      res.clearCookie(process.env.RT_COOKIE);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   @Mutation(() => User)
-  async register(
-    @Arg("input") input: UserRegistrationInput,
-  ): Promise<User> {
+  async register(@Arg("input") input: UserRegistrationInput): Promise<User> {
     const existing: User[] = await User.find({
       where: { username: input.username },
       select: ["id"]
@@ -58,7 +66,7 @@ export class UserResolver {
 
   @Authorized([Roles.ADMIN, Roles.TEACHER, Roles.CR, Roles.STUDENT])
   @Mutation(() => Boolean, { nullable: true })
-  async refresh(@Ctx() { req, res }: GQLRuntimeContext): Promise<void> {
+  async refresh(@Ctx() { req, res }: GQLRuntimeContext): Promise<boolean> {
     const rt: string = req.cookies[process.env.RT_COOKIE];
 
     // check if in db
@@ -98,6 +106,8 @@ export class UserResolver {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production"
     });
+
+    return true;
   }
 
   @Mutation(() => User)
