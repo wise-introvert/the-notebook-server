@@ -6,10 +6,7 @@ import { UserRegistrationInput } from "../modules/user/inputs";
 import { GQLRuntimeContext, Roles } from "./types";
 
 export const customAuthChecker: AuthChecker<GQLRuntimeContext> = async (
-  {
-    context,
-    args
-  }: { root: any; args: any; context: GQLRuntimeContext; info: any },
+  { context }: { root: any; args: any; context: GQLRuntimeContext; info: any },
   roles: any[]
 ): Promise<any> => {
   /*
@@ -36,7 +33,6 @@ export const customAuthChecker: AuthChecker<GQLRuntimeContext> = async (
   }
 
   const user: User = await User.findOne(data.id);
-
   if (isEmpty(user) || roles.indexOf(user.role) < 0) {
     return false;
   }

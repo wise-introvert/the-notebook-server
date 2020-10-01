@@ -32,6 +32,6 @@ export class Department extends BaseEntity {
   @BeforeInsert()
   async setup(): Promise<void> {
     this.id = uuid();
-    this.name = formatDepartmentName(this.name);
+    this.name = formatDepartmentName(this.name.toLowerCase());
   }
 }
