@@ -7,12 +7,24 @@ import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
 import * as cookieParser from "cookie-parser";
 
-import { UserResolver, DepartmentResolver, CourseResolver } from "./modules";
+import {
+  UserResolver,
+  DepartmentResolver,
+  CourseResolver,
+  SubjectResolver,
+  DocumentResolver
+} from "./modules";
 import { customAuthChecker, formatError, GQLRuntimeContext } from "./utils";
 
 createConnection().then(async () => {
   const schema: GraphQLSchema = await buildSchema({
-    resolvers: [UserResolver, DepartmentResolver, CourseResolver],
+    resolvers: [
+      UserResolver,
+      DepartmentResolver,
+      CourseResolver,
+      SubjectResolver,
+      DocumentResolver
+    ],
     authChecker: customAuthChecker
   });
   const app: express.Application = express();

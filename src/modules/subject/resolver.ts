@@ -1,0 +1,42 @@
+import { Resolver, Arg, Query, Mutation, Authorized } from "type-graphql";
+import * as _ from "lodash";
+import * as fe from "easygraphql-format-error";
+
+import { Subject } from "./entity";
+import { CreateSubjectInput } from "./inputs";
+import { Roles } from "../../utils";
+
+const FormatError: fe = new fe();
+
+@Resolver(Subject)
+export class SubjectResolver {
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
+  @Query(() => [Subject])
+  async subjects(
+    @Arg("id", { nullable: true }) id?: string
+  ): Promise<Subject[]> {
+    const subjects: Subject[] = await Subject.find(id ? { where: { id } } : {});
+    if (_.isEmpty(subjects)) {
+      throw new Error(FormatError.errorName.NOT_FOUND);
+    }
+
+    return subjects;
+  }
+
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
+  @Mutation(() => Subject)
+  async createSubject(
+    @Arg("input") input: CreateSubjectInput
+  ): Promise<Subject> {
+    const existing: Subject[] = await Subject.find({
+      where: { name: input.name },
+      select: ["id"]
+    });
+    if (!_.isEmpty(existing)) {
+      throw new Error(FormatError.errorName.CONFLICT);
+    }
+
+    const subject: Subject = await Subject.create(input).save();
+    return subject;
+  }
+}
