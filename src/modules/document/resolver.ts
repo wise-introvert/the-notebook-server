@@ -4,7 +4,8 @@ import * as fe from "easygraphql-format-error";
 
 import { Document } from "./entity";
 import { CreateDocumentInput } from "./inputs";
-import { Roles } from "../../utils";
+import { GetUser, Roles } from "../../utils";
+import { User } from "../user";
 
 const FormatError: fe = new fe();
 
@@ -28,6 +29,7 @@ export class DocumentResolver {
   @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Mutation(() => Document)
   async createDocument(
+    @GetUser() user: User,
     @Arg("input") input: CreateDocumentInput
   ): Promise<Document> {
     const existing: Document[] = await Document.find({
@@ -38,7 +40,11 @@ export class DocumentResolver {
       throw new Error(FormatError.errorName.CONFLICT);
     }
 
-    const document: Document = await Document.create(input).save();
+    const document: Document = await Document.create({
+      ...input,
+      createdBy: user,
+      updatedBy: user
+    }).save();
     return document;
   }
 }

@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Entity,
   PrimaryColumn,
+  ManyToOne,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -9,6 +10,8 @@ import {
 } from "typeorm";
 import { ObjectType, Field, ID } from "type-graphql";
 import { v4 as uuid } from "uuid";
+
+import { User } from "../user";
 
 @Entity("documents")
 @ObjectType()
@@ -24,6 +27,14 @@ export class Document extends BaseEntity {
   @Column("varchar", { length: 255 })
   @Field()
   url: string;
+
+  @ManyToOne(() => User, { eager: true })
+  @Field(() => User)
+  createdBy: User;
+
+  @ManyToOne(() => User, { eager: true })
+  @Field(() => User)
+  updatedBy: User;
 
   @CreateDateColumn()
   created: Date;
