@@ -18,10 +18,10 @@ export interface GQLRuntimeContext {
 }
 
 export enum Roles {
-  ADMIN,
-  TEACHER,
-  CR,
-  STUDENT
+  ADMIN = "ADMIN",
+  TEACHER = "TEACHER",
+  CR = "CR",
+  STUDENT = "STUDENT"
 }
 
 registerEnumType(Roles, {

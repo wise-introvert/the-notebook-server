@@ -7,10 +7,11 @@ import {
   UpdateDateColumn,
   BeforeInsert
 } from "typeorm";
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Authorized } from "type-graphql";
 import { v4 as uuid } from "uuid";
 import * as bcrypt from "bcrypt";
 import * as i from "i";
+import { Roles } from "../../utils";
 
 const inflect = i();
 
@@ -25,6 +26,7 @@ export class User extends BaseEntity {
   @Field()
   username: string;
 
+  @Authorized(Roles.ADMIN)
   @Column("varchar", { length: 255 })
   @Field()
   password: string;
@@ -32,6 +34,11 @@ export class User extends BaseEntity {
   @Column("varchar", { length: 255 })
   @Field()
   name: string;
+
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
+  @Column("varchar", { default: Roles.STUDENT })
+  @Field(() => Roles, { nullable: true })
+  role: Roles;
 
   @Column("varchar", { length: 255, nullable: true })
   @Field()

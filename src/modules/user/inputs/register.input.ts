@@ -1,5 +1,13 @@
 import { InputType, Field } from "type-graphql";
-import { IsString, IsEmail, Min, Max, IsOptional } from "class-validator";
+import {
+  IsString,
+  IsEmail,
+  Min,
+  Max,
+  IsOptional,
+  IsEnum
+} from "class-validator";
+import { Roles } from "../../../utils";
 
 @InputType()
 export class UserRegistrationInput {
@@ -14,6 +22,11 @@ export class UserRegistrationInput {
   @Field()
   @IsString()
   name: string;
+
+  @Field(() => Roles, { nullable: true })
+  @IsOptional()
+  @IsEnum(Roles)
+  role: Roles;
 
   @Field({ nullable: true })
   @IsOptional()

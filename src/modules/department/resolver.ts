@@ -1,15 +1,17 @@
-import { Resolver, Arg, Query, Mutation } from "type-graphql";
+import { Resolver, Arg, Query, Mutation, Authorized } from "type-graphql";
 import * as _ from "lodash";
 import * as fe from "easygraphql-format-error";
 
 import { Department } from "./entity";
 import { CreateDepartmentInput } from "./inputs";
 import { formatDepartmentName } from "./utils";
+import { Roles } from "../../utils";
 
 const FormatError: fe = new fe();
 
 @Resolver(Department)
 export class DepartmentResolver {
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Department])
   async departments(): Promise<Department[]> {
     const departments: Department[] = await Department.find({});
@@ -20,6 +22,7 @@ export class DepartmentResolver {
     return departments;
   }
 
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => Department)
   async department(
     @Arg("id", { nullable: true }) id?: string
@@ -31,6 +34,7 @@ export class DepartmentResolver {
     return department;
   }
 
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Mutation(() => Department)
   async createDepartment(
     @Arg("input") input: CreateDepartmentInput

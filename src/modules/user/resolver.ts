@@ -1,4 +1,4 @@
-import { Resolver, Arg, Query, Mutation, Ctx } from "type-graphql";
+import { Resolver, Arg, Query, Mutation, Ctx, Authorized } from "type-graphql";
 import * as bcrypt from "bcrypt";
 import * as _ from "lodash";
 import * as fe from "easygraphql-format-error";
@@ -9,7 +9,8 @@ import { UserRegistrationInput, UserLoginInput } from "./inputs";
 import {
   RefreshTokenPayload,
   AuthTokenPayload,
-  GQLRuntimeContext
+  GQLRuntimeContext,
+  Roles
 } from "../../utils";
 import { RefreshToken } from "./utils";
 
@@ -17,6 +18,7 @@ const FormatError: fe = new fe();
 
 @Resolver(User)
 export class UserResolver {
+  @Authorized([Roles.ADMIN, Roles.TEACHER, Roles.CR])
   @Query(() => [User])
   async users(): Promise<User[]> {
     const users: User[] = await User.find({});
@@ -27,8 +29,9 @@ export class UserResolver {
     return users;
   }
 
+  @Authorized([Roles.ADMIN, Roles.TEACHER, Roles.CR])
   @Query(() => User)
-  async user(@Arg("id", { nullable: true }) id?: string): Promise<User> {
+  async user(@Arg("id") id: string): Promise<User> {
     const user: User | undefined = await User.findOne(id);
     if (_.isEmpty(user)) {
       throw new Error(FormatError.errorName.NOT_FOUND);
@@ -36,8 +39,11 @@ export class UserResolver {
     return user;
   }
 
+  @Authorized(Roles.ADMIN)
   @Mutation(() => User)
-  async register(@Arg("input") input: UserRegistrationInput): Promise<User> {
+  async register(
+    @Arg("input") input: UserRegistrationInput,
+  ): Promise<User> {
     const existing: User[] = await User.find({
       where: { username: input.username },
       select: ["id"]
@@ -50,6 +56,7 @@ export class UserResolver {
     return user;
   }
 
+  @Authorized([Roles.ADMIN, Roles.TEACHER, Roles.CR, Roles.STUDENT])
   @Mutation(() => Boolean, { nullable: true })
   async refresh(@Ctx() { req, res }: GQLRuntimeContext): Promise<void> {
     const rt: string = req.cookies[process.env.RT_COOKIE];
