@@ -13,25 +13,17 @@ const FormatError: fe = new fe();
 export class DepartmentResolver {
   @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Department])
-  async departments(): Promise<Department[]> {
-    const departments: Department[] = await Department.find({});
+  async departments(
+    @Arg("id", { nullable: true }) id?: string
+  ): Promise<Department[]> {
+    const departments: Department[] = await Department.find(
+      id ? { where: { id } } : {}
+    );
     if (_.isEmpty(departments)) {
       throw new Error(FormatError.errorName.NOT_FOUND);
     }
 
     return departments;
-  }
-
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
-  @Query(() => Department)
-  async department(
-    @Arg("id", { nullable: true }) id?: string
-  ): Promise<Department> {
-    const department: Department | undefined = await Department.findOne(id);
-    if (_.isEmpty(department)) {
-      throw new Error(FormatError.errorName.NOT_FOUND);
-    }
-    return department;
   }
 
   @Authorized([Roles.ADMIN, Roles.TEACHER])
