@@ -33,7 +33,6 @@ export class DepartmentResolver {
     @GetUser() user: User,
     @Arg("input") input: CreateDepartmentInput
   ): Promise<Department> {
-    console.log("user: ", JSON.stringify(user));
     const existing: Department[] = await Department.find({
       where: { name: formatDepartmentName(input.name) },
       select: ["id"]
@@ -42,7 +41,11 @@ export class DepartmentResolver {
       throw new Error(FormatError.errorName.CONFLICT);
     }
 
-    const department: Department = await Department.create(input).save();
+    const department: Department = await Department.create({
+      ...input,
+      createdBy: user,
+      updatedBy: user
+    }).save();
     return department;
   }
 }
