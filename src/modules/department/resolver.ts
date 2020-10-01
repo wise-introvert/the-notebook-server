@@ -5,7 +5,8 @@ import * as fe from "easygraphql-format-error";
 import { Department } from "./entity";
 import { CreateDepartmentInput } from "./inputs";
 import { formatDepartmentName } from "./utils";
-import { Roles } from "../../utils";
+import { GetUser, Roles } from "../../utils";
+import { User } from "../user";
 
 const FormatError: fe = new fe();
 
@@ -29,8 +30,10 @@ export class DepartmentResolver {
   @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Mutation(() => Department)
   async createDepartment(
+    @GetUser() user: User,
     @Arg("input") input: CreateDepartmentInput
   ): Promise<Department> {
+    console.log("user: ", JSON.stringify(user));
     const existing: Department[] = await Department.find({
       where: { name: formatDepartmentName(input.name) },
       select: ["id"]
