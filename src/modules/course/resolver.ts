@@ -4,7 +4,8 @@ import * as fe from "easygraphql-format-error";
 
 import { Course } from "./entity";
 import { CreateCourseInput } from "./inputs";
-import { Roles } from "../../utils";
+import { GetUser, Roles } from "../../utils";
+import { User } from "../user";
 
 const FormatError: fe = new fe();
 
@@ -23,7 +24,10 @@ export class CourseResolver {
 
   @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Mutation(() => Course)
-  async createCourse(@Arg("input") input: CreateCourseInput): Promise<Course> {
+  async createCourse(
+    @GetUser() user: User,
+    @Arg("input") input: CreateCourseInput
+  ): Promise<Course> {
     const existing: Course[] = await Course.find({
       where: { name: input.name },
       select: ["id"]
@@ -32,7 +36,11 @@ export class CourseResolver {
       throw new Error(FormatError.errorName.CONFLICT);
     }
 
-    const course: Course = await Course.create(input).save();
+    const course: Course = await Course.create({
+      ...input,
+      createdBy: user,
+      updatedBy: user
+    }).save();
     return course;
   }
 }
