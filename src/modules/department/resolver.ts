@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import * as fe from "easygraphql-format-error";
 
 import { Department } from "./entity";
-import { CreateDepartmentInput } from "./inputs";
+import { CreateDepartmentInput, UpdateDepartmentInput } from "./inputs";
 import { formatDepartmentName } from "./utils";
 import { GetUser, Roles } from "../../utils";
 import { User } from "../user";
@@ -25,6 +25,16 @@ export class DepartmentResolver {
     }
 
     return departments;
+  }
+
+  @Authorized([Roles.ADMIN, Roles.TEACHER])
+  @Mutation(() => Department!)
+  async updateDepartment(
+    @Arg("id") id: string,
+    @Arg("input") input: UpdateDepartmentInput
+  ): Promise<Department> {
+    await Department.update(id, input);
+    return Department.findOne(id);
   }
 
   @Authorized([Roles.ADMIN, Roles.TEACHER])
