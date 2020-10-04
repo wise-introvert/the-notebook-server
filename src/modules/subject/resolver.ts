@@ -1,4 +1,12 @@
-import { Resolver, Arg, Query, Mutation, Authorized } from "type-graphql";
+import {
+  Resolver,
+  Arg,
+  Query,
+  Mutation,
+  Authorized,
+  FieldResolver,
+  Root
+} from "type-graphql";
 import * as _ from "lodash";
 import * as fe from "easygraphql-format-error";
 
@@ -7,6 +15,7 @@ import { CreateSubjectInput } from "./inputs";
 import { GetUser, Roles } from "../../utils";
 import { User } from "../user";
 import { Course } from "../course";
+import { Document } from "../document";
 
 const FormatError: fe = new fe();
 const updateCourseSubjectArray = async (
@@ -39,6 +48,25 @@ export class SubjectResolver {
     }
 
     return subjects;
+  }
+
+  @FieldResolver()
+  async documents(@Root() subject: Subject): Promise<Document[]> {
+    let promises: any[] = [];
+    if (_.isEmpty(subject.documents)) {
+      return [
+        {
+          name: "NA",
+          id: "NA",
+          url: "NA"
+        } as Document
+      ];
+    }
+    subject.documents.forEach((documentID: string) => {
+      promises.push(Document.findOne(documentID));
+    });
+    const documents: Document[] = await Promise.all(promises);
+    return documents;
   }
 
   @Authorized([Roles.ADMIN, Roles.TEACHER])

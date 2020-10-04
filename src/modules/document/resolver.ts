@@ -5,9 +5,25 @@ import * as fe from "easygraphql-format-error";
 import { Document } from "./entity";
 import { CreateDocumentInput } from "./inputs";
 import { GetUser, Roles } from "../../utils";
-import { User } from "../user";
+import { User, Subject } from "..";
 
 const FormatError: fe = new fe();
+const updateSubjectDocumentsArray = async (
+  subjectID: string,
+  documentID: string
+): Promise<Subject> => {
+  const subject: Subject = await Subject.findOne(subjectID);
+  const documents: string[] = subject?.documents || [];
+  documents.push(documentID);
+  await Subject.update(subjectID, {
+    ...subject,
+    documents
+  });
+  return {
+    ...subject,
+    documents
+  } as Subject;
+};
 
 @Resolver(Document)
 export class DocumentResolver {
@@ -45,6 +61,13 @@ export class DocumentResolver {
       createdBy: user,
       updatedBy: user
     }).save();
+
+    let promises: Promise<Subject>[] = [];
+    input.subjects.map((subjectID: string) => {
+      promises.push(updateSubjectDocumentsArray(subjectID, document.id));
+    });
+
+    await Promise.all(promises);
     return document;
   }
 }
