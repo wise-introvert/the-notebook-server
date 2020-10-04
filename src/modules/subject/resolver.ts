@@ -6,8 +6,25 @@ import { Subject } from "./entity";
 import { CreateSubjectInput } from "./inputs";
 import { GetUser, Roles } from "../../utils";
 import { User } from "../user";
+import { Course } from "../course";
 
 const FormatError: fe = new fe();
+const updateCourseSubjectArray = async (
+  courseID: string,
+  subjectID: string
+): Promise<Course> => {
+  const course: Course = await Course.findOne(courseID);
+  const subjects: string[] = course?.subjects || [];
+  subjects.push(subjectID);
+  await Course.update(courseID, {
+    ...course,
+    subjects
+  });
+  return {
+    ...course,
+    subjects
+  } as Course;
+};
 
 @Resolver(Subject)
 export class SubjectResolver {
@@ -43,6 +60,13 @@ export class SubjectResolver {
       createdBy: user,
       updatedBy: user
     }).save();
+
+    let promises: Promise<Course>[] = [];
+    input.courses.map((courseID: string) => {
+      promises.push(updateCourseSubjectArray(courseID, subject.id));
+    });
+
+    await Promise.all(promises);
     return subject;
   }
 }

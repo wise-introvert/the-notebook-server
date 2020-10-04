@@ -1,5 +1,5 @@
 import { InputType, Field } from "type-graphql";
-import { IsString, IsUrl } from "class-validator";
+import { ArrayNotEmpty, IsString, IsUrl } from "class-validator";
 
 @InputType()
 export class CreateDocumentInput {
@@ -10,4 +10,8 @@ export class CreateDocumentInput {
   @Field()
   @IsUrl()
   url: string;
+
+  @Field(() => [String!]!)
+  @ArrayNotEmpty()
+  subjects: string[];
 }
