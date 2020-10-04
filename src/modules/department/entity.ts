@@ -13,6 +13,7 @@ import { v4 as uuid } from "uuid";
 
 import { formatDepartmentName } from "./utils";
 import { User } from "../user";
+import { Course } from "../course";
 
 @Entity("departments")
 @ObjectType()
@@ -24,6 +25,10 @@ export class Department extends BaseEntity {
   @Column("varchar", { length: 255 })
   @Field()
   name: string;
+
+  @Column("text", { array: true, nullable: true })
+  @Field(() => [Course!])
+  courses?: string[];
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)

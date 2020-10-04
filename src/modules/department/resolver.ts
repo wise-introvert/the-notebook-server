@@ -1,4 +1,12 @@
-import { Resolver, Arg, Query, Mutation, Authorized } from "type-graphql";
+import {
+  Resolver,
+  Arg,
+  Query,
+  Mutation,
+  Authorized,
+  FieldResolver,
+  Root
+} from "type-graphql";
 import * as _ from "lodash";
 import * as fe from "easygraphql-format-error";
 
@@ -7,6 +15,7 @@ import { CreateDepartmentInput, UpdateDepartmentInput } from "./inputs";
 import { formatDepartmentName } from "./utils";
 import { GetUser, Roles } from "../../utils";
 import { User } from "../user";
+import { Course } from "../course";
 
 const FormatError: fe = new fe();
 
@@ -25,6 +34,19 @@ export class DepartmentResolver {
     }
 
     return departments;
+  }
+
+  @FieldResolver()
+  async courses(@Root() department: Department) {
+    let promises: any[] = [];
+    if (!department.courses.length) {
+      return [];
+    }
+    department.courses.forEach((courseID: string) => {
+      promises.push(Course.findOne(courseID));
+    });
+    const courses: Course[] = await Promise.all(promises);
+    return courses;
   }
 
   @Authorized([Roles.ADMIN, Roles.TEACHER])

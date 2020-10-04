@@ -11,7 +11,7 @@ import {
 import { ObjectType, Field, ID } from "type-graphql";
 import { v4 as uuid } from "uuid";
 
-import { User } from "..";
+import { User, Document } from "..";
 
 @Entity("subjects")
 @ObjectType()
@@ -23,6 +23,10 @@ export class Subject extends BaseEntity {
   @Column("varchar", { length: 255 })
   @Field()
   name: string;
+
+  @Column("text", { array: true, nullable: true })
+  @Field(() => [Document!])
+  documents?: string[];
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)

@@ -6,8 +6,25 @@ import { Course } from "./entity";
 import { CreateCourseInput } from "./inputs";
 import { GetUser, Roles } from "../../utils";
 import { User } from "../user";
+import { Department } from "../department";
 
 const FormatError: fe = new fe();
+const updateDepartmentCoursesArray = async (
+  departmentID: string,
+  courseID: string
+): Promise<Department> => {
+  const department: Department = await Department.findOne(departmentID);
+  const courses: string[] = department?.courses || [];
+  courses.push(courseID);
+  await Department.update(departmentID, {
+    ...department,
+    courses
+  });
+  return {
+    ...department,
+    courses
+  } as Department;
+};
 
 @Resolver(Course)
 export class CourseResolver {
@@ -41,6 +58,14 @@ export class CourseResolver {
       createdBy: user,
       updatedBy: user
     }).save();
+
+    let promises: Promise<Department>[] = [];
+    input.departments.map((departmentID: string) => {
+      promises.push(updateDepartmentCoursesArray(departmentID, course.id));
+    });
+
+    await Promise.all(promises);
+
     return course;
   }
 }
