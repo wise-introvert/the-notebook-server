@@ -5,5 +5,4 @@ deploy:
   app: the-notebook-graph
   on:
     repo: wise-introvert/the-notebook-server
-    branch: release
   skip_cleanup: 'true'
