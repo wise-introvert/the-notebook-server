@@ -39,6 +39,7 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "start:watch": "nodemon"
+    "start:watch": "nodemon",
+    "test": ""
   }
 }
