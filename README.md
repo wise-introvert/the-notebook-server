@@ -1,7 +1,3 @@
-# Awesome Project Build with TypeORM
+## The Notebook
 
-Steps to run this project:
-
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
+[![Build Status](https://travis-ci.com/wise-introvert/the-notebook-server.svg?token=zQ3nPdnLNE1dh6XKUpxR&branch=release)](https://travis-ci.com/wise-introvert/the-notebook-server)
