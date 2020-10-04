@@ -40,6 +40,6 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:watch": "nodemon",
-    "test": ""
+    "test": "echo \"No tests found\""
   }
 }
