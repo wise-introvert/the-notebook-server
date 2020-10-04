@@ -10,6 +10,4 @@ deploy:
   app: the-notebook-graph
   on:
     repo: wise-introvert/the-notebook-server
-    branches:
-      only:
-        - release
+    branch: release
