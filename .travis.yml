@@ -9,7 +9,6 @@ deploy:
     secure: tZ+UdqC01FaaUTh7Ea7Hjf8svtr5xUhBte6TCMkbfU6KtuyrRLLPUhqW3oES+HCrGOXvaZF2bDSWhE4aacI5U6ggVN9zDcfY2sLFoguIYH99pJJPJyPYnkIHFHgMwKJTSoMXuqU617o2Au2Phk4aJg0crI178o4X0vsDakhdSFngucAIajVNPleUpjQMAUm+7/Lr264dOuEGJgwHw4zKfBdyuW0pObqtfHd3sL8GYKQuXSUAiNjm+j07sjpPuDWVMAel3GEbgk38EikzvnVY/LQ61BirNO85AnIpGB3si3nTjlukRKAQecW8uwmOqZWzBLN68MPHDolzOT/sz6bW3yx6C7MTms8cHbJwTv2TocmFK7o3zmRSe67Fqi/9wcSWRAuXbVigZzzhwSkFi+xoBQppn6hqKpvBU9X4oIvxGeOqg+6VrpzUHl6L8C0LHN7FMgLjj2SMUzx7x8fY91KeL1CpgfRKOZWGYOWVP+JMR+uNVxoFP7clNA6jG1WEwXSZ5aOmbzk6eXAE6/8kAh4hMtmt2On5pLVToV3E6s2hQT6hT59G7ZmZfTOhAYJ5OQUAQXkmv+IRD2vu+Yizt34F7+ixyFxzyl1O9X+LjofRiVjZYidnz2aZ6FvEibCP5jSUA2O85jqWx1C6v0VzEYIEj0ugyyK8jOHTy3I2ZltP0Sw=
   app: the-notebook-graph
   on:
-    repo: wise-introvert/the-notebook-server
     branches:
       only:
         - release
