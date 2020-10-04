@@ -16,7 +16,9 @@ import {
 } from "./modules";
 import { customAuthChecker, formatError, GQLRuntimeContext } from "./utils";
 
-createConnection().then(async () => {
+createConnection(
+  process.env.NODE_ENV === "production" ? "production" : "default"
+).then(async () => {
   const schema: GraphQLSchema = await buildSchema({
     resolvers: [
       UserResolver,
