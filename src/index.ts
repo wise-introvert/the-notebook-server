@@ -9,6 +9,7 @@ import {
 import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
+import * as path from "path";
 import * as cookieParser from "cookie-parser";
 
 import {
@@ -26,7 +27,7 @@ const getOptions = async () => {
     type: "postgres",
     synchronize: true,
     logging: false,
-    entities: ["dist/entity/*.*"]
+    entities: [path.join(__dirname, "./modules/**/*entity.*")]
   };
   if (process.env.DATABASE_URL) {
     Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
