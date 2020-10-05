@@ -19,13 +19,14 @@ import { customAuthChecker, formatError, GQLRuntimeContext } from "./utils";
 createConnection(
   process.env.NODE_ENV === "production"
     ? {
-        name: "default",
+        name: "production",
         type: "postgres",
-        host: "localhost",
-        port: 4444,
-        username: "postgres",
-        password: "thepassword",
-        database: "thenotebookdev",
+        host: "ec2-54-157-234-29.compute-1.amazonaws.com",
+        port: 5432,
+        username: "fyamyeyloondsp",
+        password:
+          "878528b7fc51c33aa4db386bcc42034e09d3eae8c33621a81e7577d33ed359e3",
+        database: "d49uka4qa8bklo",
         synchronize: true,
         logging: false,
         entities: ["src/modules/**/*entity.*"],
@@ -38,14 +39,13 @@ createConnection(
         }
       }
     : {
-        name: "production",
+        name: "default",
         type: "postgres",
-        host: "ec2-54-157-234-29.compute-1.amazonaws.com",
-        port: 5432,
-        username: "fyamyeyloondsp",
-        password:
-          "878528b7fc51c33aa4db386bcc42034e09d3eae8c33621a81e7577d33ed359e3",
-        database: "d49uka4qa8bklo",
+        host: "localhost",
+        port: 4444,
+        username: "postgres",
+        password: "thepassword",
+        database: "thenotebookdev",
         synchronize: true,
         logging: false,
         entities: ["src/modules/**/*entity.*"],
