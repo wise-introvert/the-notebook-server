@@ -66,7 +66,7 @@ connect().then(async () => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: "*",
+      origin: "https://theonlynotebook.netlify.app",
       credentials: true
     })
   );
