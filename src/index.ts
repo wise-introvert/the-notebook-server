@@ -24,13 +24,8 @@ const getOptions = async () => {
   let connectionOptions: ConnectionOptions;
   connectionOptions = {
     type: "postgres",
-    synchronize: false,
+    synchronize: true,
     logging: false,
-    /*
-    extra: {
-      ssl: true
-    },
-    */
     entities: ["dist/entity/*.*"]
   };
   if (process.env.DATABASE_URL) {
