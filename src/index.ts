@@ -1,7 +1,11 @@
 import "dotenv/config";
 import "reflect-metadata";
 import * as express from "express";
-import { createConnection } from "typeorm";
+import {
+  ConnectionOptions,
+  createConnection,
+  getConnectionOptions
+} from "typeorm";
 import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
 import { ApolloServer } from "apollo-server-express";
@@ -16,48 +20,34 @@ import {
 } from "./modules";
 import { customAuthChecker, formatError, GQLRuntimeContext } from "./utils";
 
-createConnection(
-  process.env.NODE_ENV === "production"
-    ? {
-        name: "production",
-        type: "postgres",
-        host: "ec2-54-157-234-29.compute-1.amazonaws.com",
-        port: 5432,
-        username: "fyamyeyloondsp",
-        password:
-          "878528b7fc51c33aa4db386bcc42034e09d3eae8c33621a81e7577d33ed359e3",
-        database: "d49uka4qa8bklo",
-        synchronize: true,
-        logging: false,
-        entities: ["src/modules/**/*entity.*"],
-        migrations: ["src/migration/**/*.ts"],
-        subscribers: ["src/subscriber/**/*.ts"],
-        cli: {
-          entitiesDir: "src/modules/**/entity.*",
-          migrationsDir: "src/migration",
-          subscribersDir: "src/subscriber"
-        }
-      }
-    : {
-        name: "default",
-        type: "postgres",
-        host: "localhost",
-        port: 4444,
-        username: "postgres",
-        password: "thepassword",
-        database: "thenotebookdev",
-        synchronize: true,
-        logging: false,
-        entities: ["src/modules/**/*entity.*"],
-        migrations: ["src/migration/**/*.ts"],
-        subscribers: ["src/subscriber/**/*.ts"],
-        cli: {
-          entitiesDir: "src/modules/**/entity.*",
-          migrationsDir: "src/migration",
-          subscribersDir: "src/subscriber"
-        }
-      }
-).then(async () => {
+const getOptions = async () => {
+  let connectionOptions: ConnectionOptions;
+  connectionOptions = {
+    type: "postgres",
+    synchronize: false,
+    logging: false,
+    extra: {
+      ssl: true
+    },
+    entities: ["dist/entity/*.*"]
+  };
+  if (process.env.DATABASE_URL) {
+    Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
+  } else {
+    // gets your default configuration
+    // you could get a specific config by name getConnectionOptions('production')
+    // or getConnectionOptions(process.env.NODE_ENV)
+    connectionOptions = await getConnectionOptions();
+  }
+
+  return connectionOptions;
+};
+
+const connect = async (): Promise<void> => {
+  const typeormconfig = await getOptions();
+  await createConnection(typeormconfig);
+};
+connect().then(async () => {
   const schema: GraphQLSchema = await buildSchema({
     resolvers: [
       UserResolver,
