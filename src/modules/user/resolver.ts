@@ -105,7 +105,7 @@ export class UserResolver {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
       httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none"
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
     });
 
     return true;
@@ -149,13 +149,13 @@ export class UserResolver {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
       httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none"
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
     });
     res.cookie(process.env.RT_COOKIE || "qidrt", rt, {
       expires: new Date(new Date().getTime() + 24 * 7 * 60 * 60 * 1000),
       httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none"
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
     });
 
     return user;
