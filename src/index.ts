@@ -1,6 +1,7 @@
 import "dotenv/config";
 import "reflect-metadata";
 import * as express from "express";
+import * as cors from "cors";
 import {
   ConnectionOptions,
   createConnection,
@@ -22,6 +23,7 @@ import {
 import { customAuthChecker, formatError, GQLRuntimeContext } from "./utils";
 
 const getOptions = async () => {
+  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
   let connectionOptions: ConnectionOptions;
   connectionOptions = {
     type: "postgres",
@@ -43,6 +45,10 @@ const getOptions = async () => {
 
 const connect = async (): Promise<void> => {
   const typeormconfig = await getOptions();
+  console.log(`\n`);
+  console.log(`\tconfiguration: `);
+  console.log(typeormconfig);
+  console.log(`\n`);
   await createConnection(typeormconfig);
 };
 connect().then(async () => {
@@ -58,6 +64,12 @@ connect().then(async () => {
   });
   const app: express.Application = express();
   app.use(cookieParser());
+  app.use(
+    cors({
+      origin: "*",
+      credentials: true
+    })
+  );
   const server: ApolloServer = new ApolloServer({
     schema,
     formatError,
@@ -66,7 +78,11 @@ connect().then(async () => {
       res
     })
   });
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    path: "/",
+    cors: false // { origin: "*", credentials: true }
+  });
 
   app.listen({ port: process.env.PORT || 4000 }, () => {
     console.log(

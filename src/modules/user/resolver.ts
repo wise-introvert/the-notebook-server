@@ -103,7 +103,7 @@ export class UserResolver {
 
     res.cookie(process.env.AT_COOKIE, at, {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production"
     });
 
@@ -144,14 +144,14 @@ export class UserResolver {
 
     await RefreshToken.create({ token: rt }).save();
 
-    res.cookie(process.env.AT_COOKIE, at, {
+    res.cookie(process.env.AT_COOKIE || "qidat", at, {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production"
     });
-    res.cookie(process.env.RT_COOKIE, rt, {
+    res.cookie(process.env.RT_COOKIE || "qidrt", rt, {
       expires: new Date(new Date().getTime() + 24 * 7 * 60 * 60 * 1000),
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production"
     });
 
