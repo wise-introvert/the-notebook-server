@@ -64,7 +64,6 @@ export class UserResolver {
     return user;
   }
 
-  @Authorized([Roles.ADMIN, Roles.TEACHER, Roles.CR, Roles.STUDENT])
   @Mutation(() => Boolean, { nullable: true })
   async refresh(@Ctx() { req, res }: GQLRuntimeContext): Promise<boolean> {
     const rt: string = req.cookies[process.env.RT_COOKIE];
