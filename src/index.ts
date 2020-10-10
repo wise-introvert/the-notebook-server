@@ -66,7 +66,11 @@ connect().then(async () => {
   app.use(cookieParser());
   app.use(
     cors({
-      origin: ["https://theonlynotebook.netlify.app", "localhost:3000", "http://localhost:3000"],
+      origin: [
+        "https://theonlynotebook.netlify.app",
+        "localhost:3000",
+        "http://localhost:3000"
+      ],
       credentials: true
     })
   );
@@ -76,7 +80,8 @@ connect().then(async () => {
     context: ({ req, res }: GQLRuntimeContext): GQLRuntimeContext => ({
       req,
       res
-    })
+    }),
+    playground: true
   });
   server.applyMiddleware({
     app,
