@@ -35,7 +35,6 @@ export class User extends BaseEntity {
   @Field()
   name: string;
 
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Column("varchar", { default: Roles.STUDENT })
   @Field(() => Roles, { nullable: true })
   role: Roles;
