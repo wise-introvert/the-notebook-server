@@ -80,8 +80,7 @@ connect().then(async () => {
     context: ({ req, res }: GQLRuntimeContext): GQLRuntimeContext => ({
       req,
       res
-    }),
-    playground: true
+    })
   });
   server.applyMiddleware({
     app,
