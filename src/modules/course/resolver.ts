@@ -37,7 +37,6 @@ const updateDepartmentCoursesArray = async (
 
 @Resolver(Course)
 export class CourseResolver {
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Course])
   async courses(@Arg("id", { nullable: true }) id?: string): Promise<Course[]> {
     const courses: Course[] = await Course.find(id ? { where: { id } } : {});

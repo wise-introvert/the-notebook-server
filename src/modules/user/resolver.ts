@@ -44,6 +44,7 @@ export class UserResolver {
     try {
       res.clearCookie(process.env.AT_COOKIE);
       res.clearCookie(process.env.RT_COOKIE);
+      res.clearCookie("session");
       return true;
     } catch {
       return false;

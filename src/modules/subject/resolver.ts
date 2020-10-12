@@ -37,7 +37,6 @@ const updateCourseSubjectArray = async (
 
 @Resolver(Subject)
 export class SubjectResolver {
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Subject])
   async subjects(
     @Arg("id", { nullable: true }) id?: string

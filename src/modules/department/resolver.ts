@@ -21,7 +21,6 @@ const FormatError: fe = new fe();
 
 @Resolver(Department)
 export class DepartmentResolver {
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Department])
   async departments(
     @Arg("id", { nullable: true }) id?: string

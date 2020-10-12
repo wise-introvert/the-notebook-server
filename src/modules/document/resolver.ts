@@ -27,7 +27,6 @@ const updateSubjectDocumentsArray = async (
 
 @Resolver(Document)
 export class DocumentResolver {
-  @Authorized([Roles.ADMIN, Roles.TEACHER])
   @Query(() => [Document])
   async documents(
     @Arg("id", { nullable: true }) id?: string

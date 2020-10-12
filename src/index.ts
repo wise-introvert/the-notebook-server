@@ -67,6 +67,7 @@ connect().then(async () => {
   app.use(
     cors({
       origin: [
+        "https://theonlynotebook.vercel.app",
         "https://theonlynotebook.netlify.app",
         "localhost:3000",
         "http://localhost:3000"
