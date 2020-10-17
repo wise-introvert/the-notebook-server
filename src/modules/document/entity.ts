@@ -24,9 +24,9 @@ export class Document extends BaseEntity {
   @Field()
   name: string;
 
-  @Column("varchar", { length: 255 })
-  @Field()
-  url: string;
+  @Column("varchar", { length: 255, array: true })
+  @Field(() => [String])
+  urls: string[];
 
   @ManyToOne(() => User, { eager: true })
   @Field(() => User)

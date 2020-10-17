@@ -57,7 +57,7 @@ export class SubjectResolver {
         {
           name: "NA",
           id: "NA",
-          url: "NA"
+          urls: ["NA"]
         } as Document
       ];
     }
