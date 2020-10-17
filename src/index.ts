@@ -2,6 +2,7 @@ import "dotenv/config";
 import "reflect-metadata";
 import * as express from "express";
 import * as cors from "cors";
+import * as morgan from "morgan";
 import {
   ConnectionOptions,
   createConnection,
@@ -63,6 +64,7 @@ connect().then(async () => {
     authChecker: customAuthChecker
   });
   const app: express.Application = express();
+  app.use(morgan("dev"));
   app.use(cookieParser());
   app.use(
     cors({

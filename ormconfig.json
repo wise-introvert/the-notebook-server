@@ -6,7 +6,7 @@
   "username": "postgres",
   "password": "thepassword",
   "database": "thenotebookdev",
-  "synchronize": true,
+  "synchronize": false,
   "logging": false,
   "entities": ["src/modules/**/*entity.*"],
   "migrations": ["src/migration/**/*.ts"],
